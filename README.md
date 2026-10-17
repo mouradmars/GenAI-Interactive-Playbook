@@ -2,6 +2,22 @@
 
 An interactive laboratory for university courses on neural networks, NLP and LLMs. Every visualization is driven by a real computation: module 01 runs a small GPT that was trained in this repository, and every number on screen is recomputed in the browser from its weights.
 
+**Live site:** https://mouradmars.github.io/GenAI-Interactive-Playbook/ (each module has a deep link, e.g. [`#attention`](https://mouradmars.github.io/GenAI-Interactive-Playbook/#attention))
+
+## Screenshots
+
+**Module 03 · Attention** — three synchronized microscopes driven by one heatmap click (token graph, matrix chain, pipeline), with the mathematical microscope on the right:
+
+![Attention: three synchronized microscopes](docs/screenshots/03-attention-microscopes.png)
+
+| | |
+|---|---|
+| ![Q/K/V projection factory](docs/screenshots/03-attention-qkv.png) <br> **03 · Attention** — the Q/K/V projection factory: click any output cell to see its products and sum | ![Multi-head explorer](docs/screenshots/03-attention-heads.png) <br> **03 · Attention** — multi-head explorer with head chambers and ablation |
+| ![Inside an LLM](docs/screenshots/01-inside-an-llm.png) <br> **01 · Inside an LLM** — one prompt through a real trained GPT, tensor by tensor | ![Transformer block](docs/screenshots/02-transformer-block.png) <br> **02 · Inside the Transformer block** — GPT pre-LN vs BERT post-LN, computed exactly |
+| ![Neural networks](docs/screenshots/04-neural-networks.png) <br> **04 · Neural networks & backprop** — forward and backward passes, gradient checks, training | ![Embeddings](docs/screenshots/06-embeddings.png) <br> **06 · Embedding space** — cosine similarity, analogies, projection distortion |
+| ![N-gram models](docs/screenshots/08-ngram.png) <br> **08 · N-gram language models** — counts, smoothing, Kneser-Ney, perplexity | ![RNN, LSTM & Transformer](docs/screenshots/09-rnn-lstm-transformer.png) <br> **09 · RNN, LSTM & Transformer** — recurrence, gates, attention and real training results |
+| ![RAG pipeline](docs/screenshots/11-rag-pipeline.png) <br> **11 · RAG pipeline** — chunking, retrieval, reranking, grounded answers and failure analysis | |
+
 ## Quick start
 
 ```bash
