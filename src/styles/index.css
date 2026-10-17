@@ -1,0 +1,133 @@
+@import 'tailwindcss';
+@import 'katex/dist/katex.min.css';
+
+/*
+  Layout concept: an observatory console — collapsible module rail (left),
+  the instrument stage (centre, ~65%), a mathematical inspector (right) and a
+  timeline transport (bottom), like a lab bench around one specimen.
+
+  Dark-first. The app pins data-theme="dark" by default; the light "projector"
+  palette applies when the viewer picks it (or the host sets light).
+*/
+:root {
+  --bg: #060a11;
+  --panel: #0b111b;
+  --panel-2: #101827;
+  --raise: #162133;
+  --line: #1d2a3d;
+  --line-strong: #2b3c55;
+  --fg: #e7eef8;
+  --muted: #8b9bb2;
+  --faint: #5b6b82;
+  --cyan: #45e1f2;
+  --violet: #a98bff;
+  --amber: #f6b552;
+  --teal: #34d6bd;
+  --rose: #ff7a90;
+  --ok: #4ade80;
+  --glow: 0 0 0 1px color-mix(in oklab, var(--cyan) 35%, transparent), 0 0 24px -6px color-mix(in oklab, var(--cyan) 55%, transparent);
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #f3f6fa; --panel: #ffffff; --panel-2: #f7f9fc; --raise: #e9eef5; --line: #d6dee9; --line-strong: #b9c6d6;
+    --fg: #0a1322; --muted: #475569; --faint: #7a889c;
+    --cyan: #0a8aa0; --violet: #6644d8; --amber: #b56a00; --teal: #0d8a78; --rose: #cf2f4f; --ok: #15803d;
+    --glow: 0 0 0 1px color-mix(in oklab, var(--cyan) 45%, transparent);
+    color-scheme: light;
+  }
+}
+:root[data-theme='light'] {
+  --bg: #f3f6fa; --panel: #ffffff; --panel-2: #f7f9fc; --raise: #e9eef5; --line: #d6dee9; --line-strong: #b9c6d6;
+  --fg: #0a1322; --muted: #475569; --faint: #7a889c;
+  --cyan: #0a8aa0; --violet: #6644d8; --amber: #b56a00; --teal: #0d8a78; --rose: #cf2f4f; --ok: #15803d;
+  --glow: 0 0 0 1px color-mix(in oklab, var(--cyan) 45%, transparent);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-raise: var(--raise);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-cyan: var(--cyan);
+  --color-violet: var(--violet);
+  --color-amber: var(--amber);
+  --color-teal: var(--teal);
+  --color-rose: var(--rose);
+  --color-ok: var(--ok);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  /* faint graticule, like an instrument's reticle */
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--line) 40%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--line) 40%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 0%, transparent 75%);
+}
+#root { position: relative; z-index: 1; }
+
+h1, h2, h3 { text-wrap: balance; }
+.font-num { font-variant-numeric: tabular-nums; }
+.eyebrow { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+
+.panel { background: var(--panel); border: 1px solid var(--line); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border-radius: 7px;
+  border: 1px solid var(--line); background: var(--panel-2); color: var(--fg); font-size: 12.5px; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.btn:hover { border-color: var(--line-strong); background: var(--raise); }
+.btn[aria-pressed='true'], .btn.active { border-color: var(--cyan); color: var(--cyan); box-shadow: var(--glow); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn-primary { background: color-mix(in oklab, var(--cyan) 18%, var(--panel)); border-color: color-mix(in oklab, var(--cyan) 55%, var(--line)); color: var(--fg); }
+.icon-btn { width: 32px; padding: 0; justify-content: center; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 6px; }
+input, select, textarea { background: var(--panel-2); border: 1px solid var(--line); color: var(--fg); border-radius: 7px; }
+input[type='range'] { accent-color: var(--cyan); background: transparent; border: 0; }
+
+.chip {
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 5px 9px; border-radius: 7px; border: 1px solid var(--line);
+  background: var(--panel-2); font-family: var(--font-mono); font-size: 13px; cursor: pointer; white-space: pre;
+}
+.chip[data-selected='true'] { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber), 0 0 18px -6px var(--amber); }
+.chip .id { font-size: 10px; color: var(--faint); }
+
+.sim-badge {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 99px;
+  border: 1px solid color-mix(in oklab, var(--teal) 60%, transparent); color: var(--teal);
+}
+.sim-badge.toy { border-color: color-mix(in oklab, var(--amber) 60%, transparent); color: var(--amber); }
+
+.scroll-thin { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+
+.presenting { font-size: 16px; }
+.presenting .stage-title { font-size: 2rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+.presenting .katex { font-size: 1.28em; }
